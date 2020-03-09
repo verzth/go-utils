@@ -37,4 +37,9 @@ func main() {
 	utils.FileMove("/root/project/filename","/root/project/newname") // Move file from path to path
 	utils.FileMove("/root/project/oldfolder/","/root/project/newfolder/", "filename") // Move file from to new location with same name
 	utils.FileMove("/root/project/oldfolder/","/root/project/newfolder/", "filename", "newname") // Move file from to new location with new name
+
+	arrDuplicate := []int{1,2,3,2,4,5,6,7,4,4,7,4,7,7,7,15}
+	fmt.Println(arrDuplicate)
+	utils.Uniquify(&arrDuplicate)
+	fmt.Println(arrDuplicate)
 }

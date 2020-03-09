@@ -69,3 +69,22 @@ func FileMove(src string, dst string, file... string)  {
 		moveFileRename(src,dst,file[0],file[1])
 	}
 }
+
+func Uniquify(collections interface{})  {
+	switch collections.(type) {
+	case *[]int: removeIntDuplicate(collections.(*[]int))
+	case *[]int8: removeInt8Duplicate(collections.(*[]int8))
+	case *[]int16: removeInt16Duplicate(collections.(*[]int16))
+	case *[]int32: removeInt32Duplicate(collections.(*[]int32))
+	case *[]int64: removeInt64Duplicate(collections.(*[]int64))
+	case *[]uint: removeUintDuplicate(collections.(*[]uint))
+	case *[]uint8: removeUint8Duplicate(collections.(*[]uint8))
+	case *[]uint16: removeUint16Duplicate(collections.(*[]uint16))
+	case *[]uint32: removeUint32Duplicate(collections.(*[]uint32))
+	case *[]uint64: removeUint64Duplicate(collections.(*[]uint64))
+	case *[]float32: removeFloat32Duplicate(collections.(*[]float32))
+	case *[]float64: removeFloat64Duplicate(collections.(*[]float64))
+	case *[]interface{}: removeInterfaceDuplicate(collections.(*[]interface{}))
+	case *[]string: removeStringDuplicate(collections.(*[]string))
+	}
+}

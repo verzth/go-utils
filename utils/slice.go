@@ -1,5 +1,7 @@
 package utils
 
+import "fmt"
+
 func addInterfaceAt(collections *[]interface{},collection interface{}, index []int)  {
 	temp := *collections
 	if len(index) == 0 {
@@ -277,5 +279,229 @@ func removeInterfaceAt(collections *[]interface{}, index int){
 	temp := *collections
 	if index < len(temp) && index >= 0 {
 		*collections = append(temp[:index], temp[index+1:]...)
+	}
+}
+
+func removeIntDuplicate(collections *[]int)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeInt8Duplicate(collections *[]int8)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeInt16Duplicate(collections *[]int16)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeInt32Duplicate(collections *[]int32)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeInt64Duplicate(collections *[]int64)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeUintDuplicate(collections *[]uint)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeUint8Duplicate(collections *[]uint8)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeUint16Duplicate(collections *[]uint16)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeUint32Duplicate(collections *[]uint32)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeUint64Duplicate(collections *[]uint64)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeFloat32Duplicate(collections *[]float32)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeFloat64Duplicate(collections *[]float64)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeStringDuplicate(collections *[]string)  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
+	}
+}
+
+func removeInterfaceDuplicate(collections *[]interface{})  {
+	temp := *collections
+	if len(temp)>1 {
+		for i:=0; i<len(temp); i++ {
+			for j:=i+1; j<len(temp); j++ {
+				fmt.Println(temp,i,temp[i],j,temp[j])
+				if temp[i] == temp[j] {
+					RemoveAt(&temp, j)
+					j--
+				}
+			}
+		}
+		*collections = temp
 	}
 }
