@@ -1,7 +1,5 @@
 package utils
 
-import "fmt"
-
 func addInterfaceAt(collections *[]interface{},collection interface{}, index []int)  {
 	temp := *collections
 	if len(index) == 0 {
@@ -287,7 +285,6 @@ func removeIntDuplicate(collections *[]int)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -303,7 +300,6 @@ func removeInt8Duplicate(collections *[]int8)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -319,7 +315,6 @@ func removeInt16Duplicate(collections *[]int16)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -335,7 +330,6 @@ func removeInt32Duplicate(collections *[]int32)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -351,7 +345,6 @@ func removeInt64Duplicate(collections *[]int64)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -367,7 +360,6 @@ func removeUintDuplicate(collections *[]uint)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -383,7 +375,6 @@ func removeUint8Duplicate(collections *[]uint8)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -399,7 +390,6 @@ func removeUint16Duplicate(collections *[]uint16)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -415,7 +405,6 @@ func removeUint32Duplicate(collections *[]uint32)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -431,7 +420,6 @@ func removeUint64Duplicate(collections *[]uint64)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -447,7 +435,6 @@ func removeFloat32Duplicate(collections *[]float32)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -463,7 +450,6 @@ func removeFloat64Duplicate(collections *[]float64)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -479,7 +465,6 @@ func removeStringDuplicate(collections *[]string)  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
@@ -495,7 +480,6 @@ func removeInterfaceDuplicate(collections *[]interface{})  {
 	if len(temp)>1 {
 		for i:=0; i<len(temp); i++ {
 			for j:=i+1; j<len(temp); j++ {
-				fmt.Println(temp,i,temp[i],j,temp[j])
 				if temp[i] == temp[j] {
 					RemoveAt(&temp, j)
 					j--
