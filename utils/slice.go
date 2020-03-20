@@ -4,7 +4,7 @@ import "reflect"
 
 func AddTo(collections interface{}, collection interface{}, indexs... int) {
 	indirect := reflect.ValueOf(collections)
-	if indirect.Elem().Kind() == reflect.Slice {
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		if len(indexs) == 0 {
 			temp := reflect.Append(indirect.Elem().Slice(0, indirect.Elem().Len()), reflect.ValueOf(collection))
 			indirect.Elem().Set(temp)
@@ -22,7 +22,7 @@ func AddTo(collections interface{}, collection interface{}, indexs... int) {
 
 func RemoveAt(collections interface{}, index int) {
 	indirect := reflect.ValueOf(collections)
-	if indirect.Elem().Kind() == reflect.Slice {
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		if index < indirect.Elem().Len() && index >= 0 {
 			temp := reflect.AppendSlice(indirect.Elem().Slice(0,index), indirect.Elem().Slice(index+1, indirect.Elem().Len()))
 			indirect.Elem().Set(temp)
@@ -30,9 +30,10 @@ func RemoveAt(collections interface{}, index int) {
 	}
 }
 
+// Uniquify(collections): Uniquify slices value
 func Uniquify(collections interface{})  {
 	indirect := reflect.ValueOf(collections)
-	if indirect.Elem().Kind() == reflect.Slice {
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		for i:=0; i<indirect.Elem().Len(); i++{
 			v1 := indirect.Elem().Index(i)
 			for j:=i+1; j<indirect.Elem().Len(); j++{
