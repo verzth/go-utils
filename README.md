@@ -34,15 +34,15 @@ func main() {
 
     arr := []int{ 1,2,3,4,5 }
     fmt.Printf("Array Before: %v\n", arr)
-    utils.RemoveAt(&arr, 3) // Remove slice at index
+    utils.Slice.RemoveAt(&arr, 3) // Remove slice at index
     fmt.Printf("Array After 1: %v\n", arr)
-    utils.AddTo(&arr, 4, 3)  // Add data to index 3
+    utils.Slice.AddTo(&arr, 4, 3)  // Add data to index 3
     fmt.Printf("Array After 2: %v\n", arr)
-    utils.AddTo(&arr, 25, 1) // Add data to index 1
+    utils.Slice.AddTo(&arr, 25, 1) // Add data to index 1
     fmt.Printf("Array After 3: %v\n", arr)
-    utils.AddTo(&arr, 100) // Add data without specify index, will be added to last index
+    utils.Slice.AddTo(&arr, 100) // Add data without specify index, will be added to last index
     fmt.Printf("Array After 4: %v\n", arr)
-    utils.AddTo(&arr, -5) // Add data with minus index, will be added to first index which is treated as 0
+    utils.Slice.AddTo(&arr, -5) // Add data with minus index, will be added to first index which is treated as 0
     fmt.Printf("Array After 5: %v\n", arr)
 
     utils.FileMove("/root/project/filename","/root/project/newname") // Move file from path to path
@@ -51,7 +51,7 @@ func main() {
 
     arrDuplicate := []int{1,2,3,2,4,5,6,7,4,4,7,4,7,7,7,15}
 	fmt.Println(arrDuplicate)
-	utils.Uniquify(&arrDuplicate)
+	utils.Slice.Uniquify(&arrDuplicate)
 	fmt.Println(arrDuplicate)
 }
 ```

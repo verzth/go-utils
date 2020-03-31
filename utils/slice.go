@@ -2,7 +2,11 @@ package utils
 
 import "reflect"
 
-func AddTo(collections interface{}, collection interface{}, indexs... int) {
+var Slice slice
+
+type slice struct {}
+
+func (s slice) AddTo(collections interface{}, collection interface{}, indexs... int) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		if len(indexs) == 0 {
@@ -20,7 +24,7 @@ func AddTo(collections interface{}, collection interface{}, indexs... int) {
 	}
 }
 
-func RemoveAt(collections interface{}, index int) {
+func (s slice) RemoveAt(collections interface{}, index int) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		if index < indirect.Elem().Len() && index >= 0 {
@@ -31,7 +35,7 @@ func RemoveAt(collections interface{}, index int) {
 }
 
 // Uniquify(collections): Uniquify slices value
-func Uniquify(collections interface{})  {
+func (s slice) Uniquify(collections interface{})  {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		for i:=0; i<indirect.Elem().Len(); i++{
@@ -39,10 +43,58 @@ func Uniquify(collections interface{})  {
 			for j:=i+1; j<indirect.Elem().Len(); j++{
 				v2 := indirect.Elem().Index(j)
 				if v1.Interface() == v2.Interface() {
-					RemoveAt(collections, j)
+					s.RemoveAt(collections, j)
 					j--
 				}
 			}
 		}
 	}
+}
+
+func (s slice) Find(collections interface{}, val interface{}) (indexes []int, state bool) {
+	indexes = []int{}; state = false
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
+		for i:=0; i<indirect.Elem().Len(); i++{
+			if indirect.Elem().Index(i).Interface() == val {
+				indexes = append(indexes,i)
+			}
+		}
+		if len(indexes) > 0 {
+			state = true
+		}
+	}
+	return
+}
+
+func (s slice) First(collections interface{}, val interface{}) (index int, state bool) {
+	index = -1; state = false
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
+		for i:=0; i<indirect.Elem().Len(); i++{
+			if indirect.Elem().Index(i).Interface() == val {
+				index = i; state=true
+				return
+			}
+		}
+	}
+	return
+}
+
+func (s slice) Last(collections interface{}, val interface{}) (index int, state bool) {
+	index = -1; state = false
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
+		for i:=0; i<indirect.Elem().Len(); i++{
+			if indirect.Elem().Index(i).Interface() == val {
+				index = i; state=true
+			}
+		}
+	}
+	return
+}
+
+func (s slice) Exist(collections interface{}, val interface{}) (state bool) {
+	_, state = s.First(collections, val)
+	return
 }
