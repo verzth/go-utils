@@ -34,6 +34,12 @@ func (s slice) RemoveAt(collections interface{}, index int) {
 	}
 }
 
+func (s slice) RemoveIn(collections interface{}, indexes []int) {
+	for _, index := range indexes {
+		s.RemoveAt(collections, index)
+	}
+}
+
 // Uniquify(collections): Uniquify slices value
 func (s slice) Uniquify(collections interface{})  {
 	indirect := reflect.ValueOf(collections)

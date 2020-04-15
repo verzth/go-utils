@@ -5,10 +5,10 @@ import (
 	"os"
 )
 
-func movePath(src string, dst string)  {
+func movePath(src string, dst string, perm os.FileMode)  {
 	oFile, err := ioutil.ReadFile(src)
 	if err == nil {
-		os.MkdirAll(dst, os.ModeDir)
+		os.MkdirAll(dst, perm)
 		nFile, err := os.Create(dst)
 		if err != nil {
 			nFile.Write(oFile)
@@ -17,10 +17,10 @@ func movePath(src string, dst string)  {
 	}
 }
 
-func moveFile(src string, dst string, filename string)  {
-	moveFileRename(src,dst,filename,filename)
+func moveFile(src string, dst string, filename string, perm os.FileMode)  {
+	moveFileRename(src,dst,filename,filename, perm)
 }
 
-func moveFileRename(src string, dst string, filename string, newname string)  {
-	movePath(src+filename, dst+newname)
+func moveFileRename(src string, dst string, filename string, newname string, perm os.FileMode)  {
+	movePath(src+filename, dst+newname, perm)
 }

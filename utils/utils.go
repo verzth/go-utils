@@ -1,5 +1,7 @@
 package utils
 
+import "os"
+
 func Substring(text string, indexs... int) string {
 	runes := []rune(text)
 	if len(indexs) > 0 {
@@ -20,13 +22,13 @@ func Substring(text string, indexs... int) string {
 	}
 }
 
-func FileMove(src string, dst string, file... string)  {
+func FileMove(src string, dst string, perm os.FileMode, file... string)  {
 	pCount := len(file)
 	if pCount == 0 {
-		movePath(src,dst)
+		movePath(src,dst, perm)
 	}else if pCount == 1 {
-		moveFile(src,dst,file[0])
+		moveFile(src,dst,file[0],perm)
 	}else{
-		moveFileRename(src,dst,file[0],file[1])
+		moveFileRename(src,dst,file[0],file[1], perm)
 	}
 }
