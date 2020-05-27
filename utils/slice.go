@@ -1,6 +1,8 @@
 package utils
 
-import "reflect"
+import (
+	"reflect"
+)
 
 var Slice slice
 
@@ -60,9 +62,22 @@ func (s slice) Uniquify(collections interface{})  {
 func (s slice) Find(collections interface{}, val interface{}) (indexes []int, state bool) {
 	indexes = []int{}; state = false
 	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
-		for i:=0; i<indirect.Elem().Len(); i++{
-			if indirect.Elem().Index(i).Interface() == val {
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice {
+			el = indirect
+		}else{
+			return
+		}
+
+		for i:=0; i<el.Len(); i++{
+			if el.Index(i).Interface() == val {
 				indexes = append(indexes,i)
 			}
 		}
@@ -76,9 +91,22 @@ func (s slice) Find(collections interface{}, val interface{}) (indexes []int, st
 func (s slice) First(collections interface{}, val interface{}) (index int, state bool) {
 	index = -1; state = false
 	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
-		for i:=0; i<indirect.Elem().Len(); i++{
-			if indirect.Elem().Index(i).Interface() == val {
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		for i:=0; i<el.Len(); i++{
+			if el.Index(i).Interface() == val {
 				index = i; state=true
 				return
 			}
@@ -90,9 +118,22 @@ func (s slice) First(collections interface{}, val interface{}) (index int, state
 func (s slice) Last(collections interface{}, val interface{}) (index int, state bool) {
 	index = -1; state = false
 	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
-		for i:=0; i<indirect.Elem().Len(); i++{
-			if indirect.Elem().Index(i).Interface() == val {
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice {
+			el = indirect
+		}else{
+			return
+		}
+
+		for i:=0; i<el.Len(); i++{
+			if el.Index(i).Interface() == val {
 				index = i; state=true
 			}
 		}
