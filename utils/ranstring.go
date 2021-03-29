@@ -18,7 +18,7 @@ var seededRand *rand.Rand = rand.New(
 func RandStringWithCharset(length int, charset string) string {
 	b := make([]byte, length)
 	for i := range b {
-		b[i] = charset[seededRand.Intn(len(charset))]
+		b[i] = charset[seededRand.Intn(len(charset)-1)]
 	}
 	return string(b)
 }
