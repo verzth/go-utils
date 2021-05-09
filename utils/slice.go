@@ -26,6 +26,141 @@ func (s slice) AddTo(collections interface{}, collection interface{}, indexs... 
 	}
 }
 
+func (s slice) IndexOf(collections interface{}, val interface{}) (index int) {
+	index = -1
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		v := reflect.ValueOf(val)
+		for i:=0; i<el.Len(); i++{
+			if el.Index(i).Interface() == v.Interface() {
+				index = i
+				return
+			}
+		}
+	}
+	return
+}
+
+func (s slice) Where(collections interface{}, fn func(int) bool) (cols interface{}) {
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		newCols := reflect.MakeSlice(indirect.Type(), 0, 0)
+		for i:=0; i<el.Len(); i++{
+			if fn(i) {
+				newCols = reflect.Append(newCols, reflect.ValueOf(el.Index(i).Interface()))
+			}
+		}
+		cols = newCols
+	}
+	return
+}
+
+func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int) {
+	index = -1
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		for i:=0; i<el.Len(); i++{
+			if fn(i) {
+				index = i
+				return
+			}
+		}
+	}
+	return
+}
+
+func (s slice) LastIndexOf(collections interface{}, val interface{}) (index int) {
+	index = -1
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice {
+			el = indirect
+		}else{
+			return
+		}
+
+		v := reflect.ValueOf(val)
+		for i:=0; i<el.Len(); i++{
+			if el.Index(i).Interface() == v.Interface() {
+				index = i
+			}
+		}
+	}
+	return
+}
+
+func (s slice) LastIndexWhere(collections interface{}, fn func(int) bool) (index int) {
+	index = -1
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		for i:=0; i<el.Len(); i++{
+			if fn(i) {
+				index = i
+			}
+		}
+	}
+	return
+}
+
 func (s slice) RemoveAt(collections interface{}, index int) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
@@ -59,8 +194,8 @@ func (s slice) Uniquify(collections interface{})  {
 	}
 }
 
-func (s slice) Find(collections interface{}, val interface{}) (indexes []int, state bool) {
-	indexes = []int{}; state = false
+func (s slice) IndexesOf(collections interface{}, val interface{}) (indexes []int) {
+	indexes = []int{}
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
 		var el reflect.Value
@@ -76,20 +211,63 @@ func (s slice) Find(collections interface{}, val interface{}) (indexes []int, st
 			return
 		}
 
+		v := reflect.ValueOf(val)
 		for i:=0; i<el.Len(); i++{
-			if el.Index(i).Interface() == val {
+			if el.Index(i).Interface() == v.Interface() {
 				indexes = append(indexes,i)
 			}
-		}
-		if len(indexes) > 0 {
-			state = true
 		}
 	}
 	return
 }
 
-func (s slice) First(collections interface{}, val interface{}) (index int, state bool) {
-	index = -1; state = false
+func (s slice) First(collections interface{}) (col interface{}) {
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		if el.Len() > 0 {
+			return el.Index(0)
+		}
+	}
+	return
+}
+
+func (s slice) Last(collections interface{}) (col interface{}) {
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			}else{
+				return
+			}
+		}else if indirect.Kind() == reflect.Slice{
+			el = indirect
+		}else{
+			return
+		}
+
+		if el.Len() > 0 {
+			return el.Index(el.Len()-1)
+		}
+	}
+	return
+}
+
+func (s slice) FirstWhere(collections interface{}, fn func(int) bool) (col interface{}) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
 		var el reflect.Value
@@ -106,17 +284,15 @@ func (s slice) First(collections interface{}, val interface{}) (index int, state
 		}
 
 		for i:=0; i<el.Len(); i++{
-			if el.Index(i).Interface() == val {
-				index = i; state=true
-				return
+			if fn(i) {
+				return el.Index(i)
 			}
 		}
 	}
 	return
 }
 
-func (s slice) Last(collections interface{}, val interface{}) (index int, state bool) {
-	index = -1; state = false
+func (s slice) LastWhere(collections interface{}, fn func(int) bool) (col interface{}) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
 		var el reflect.Value
@@ -126,15 +302,15 @@ func (s slice) Last(collections interface{}, val interface{}) (index int, state 
 			}else{
 				return
 			}
-		}else if indirect.Kind() == reflect.Slice {
+		}else if indirect.Kind() == reflect.Slice{
 			el = indirect
 		}else{
 			return
 		}
 
 		for i:=0; i<el.Len(); i++{
-			if el.Index(i).Interface() == val {
-				index = i; state=true
+			if fn(i) {
+				col = el.Index(i)
 			}
 		}
 	}
@@ -142,6 +318,7 @@ func (s slice) Last(collections interface{}, val interface{}) (index int, state 
 }
 
 func (s slice) Exist(collections interface{}, val interface{}) (state bool) {
-	_, state = s.First(collections, val)
+	i := s.IndexOf(collections, val)
+	state = i!=-1
 	return
 }

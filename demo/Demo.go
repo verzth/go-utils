@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/verzth/go-utils/utils"
+	"git.teknoku.digital/teknoku/go-utils/utils"
 	"os"
 )
 
@@ -37,14 +37,39 @@ func main() {
 	i := utils.Slice.Exist(&arr, 9)
 	fmt.Println("Exist",i)
 	j := utils.Slice.Exist(&arr, 100)
-	fmt.Println("Exist",i)
+	fmt.Println("Exist",j)
 
 	utils.FileMove("/root/project/filename","/root/project/newname", os.ModePerm) // Move file from path to path
 	utils.FileMove("/root/project/oldfolder/","/root/project/newfolder/", os.ModePerm, "filename") // Move file from to new location with same name
 	utils.FileMove("/root/project/oldfolder/","/root/project/newfolder/", os.ModePerm, "filename", "newname") // Move file from to new location with new name
 
-	arrDuplicate := []int{1,2,3,2,4,5,6,7,4,4,7,4,7,7,7,15}
+	arrDuplicate := []int{1,0,0,2,3,2,4,5,6,7,4,4,7,4,7,7,7,15}
 	fmt.Println(arrDuplicate)
 	utils.Slice.Uniquify(&arrDuplicate)
 	fmt.Println(arrDuplicate)
+
+	objArr := []map[string]int{
+		{"id": 4, "num": 2}, {"id": 3, "num": 9}, {"id": 0, "num": 1}, {"id": 8, "num": 2},
+	}
+	fmt.Printf("Where: %v\n", utils.Slice.Where(objArr, func(i int) bool {
+		return objArr[i]["num"] == 2
+	})) // Get all value in slice with condition
+
+	fmt.Printf("First: %v\n", utils.Slice.First(objArr)) // Get first value in slice
+	fmt.Printf("IndexOf: %v\n", utils.Slice.IndexOf(arrDuplicate, 15)) // Find first index of value in slice
+	fmt.Printf("FirstWhere: %v\n", utils.Slice.FirstWhere(objArr, func(i int) bool {
+		return objArr[i]["num"] == 9
+	})) // Get first value in slice with given condition
+	fmt.Printf("IndexWhere: %v\n", utils.Slice.IndexWhere(objArr, func(i int) bool {
+		return objArr[i]["id"] == 0
+	})) // Get first index in slice with given condition
+
+	fmt.Printf("Last: %v\n", utils.Slice.Last(objArr)) // Get first value in slice
+	fmt.Printf("LastIndexOf: %v\n", utils.Slice.LastIndexOf(arrDuplicate, 0)) // Find last index of value in slice
+	fmt.Printf("LastWhere: %v\n", utils.Slice.LastWhere(objArr, func(i int) bool {
+		return objArr[i]["id"] == 4
+	})) // Get last value in slice with given condition
+	fmt.Printf("LastIndexWhere: %v\n", utils.Slice.LastIndexWhere(objArr, func(i int) bool {
+		return objArr[i]["num"] == 2
+	})) // Get last index in slice with given condition
 }
