@@ -238,7 +238,7 @@ func (s slice) First(collections interface{}) (col interface{}) {
 		}
 
 		if el.Len() > 0 {
-			return el.Index(0)
+			return el.Index(0).Interface()
 		}
 	}
 	return
@@ -261,7 +261,7 @@ func (s slice) Last(collections interface{}) (col interface{}) {
 		}
 
 		if el.Len() > 0 {
-			return el.Index(el.Len()-1)
+			return el.Index(el.Len()-1).Interface()
 		}
 	}
 	return
@@ -285,7 +285,7 @@ func (s slice) FirstWhere(collections interface{}, fn func(int) bool) (col inter
 
 		for i:=0; i<el.Len(); i++{
 			if fn(i) {
-				return el.Index(i)
+				return el.Index(i).Interface()
 			}
 		}
 	}
@@ -310,7 +310,7 @@ func (s slice) LastWhere(collections interface{}, fn func(int) bool) (col interf
 
 		for i:=0; i<el.Len(); i++{
 			if fn(i) {
-				col = el.Index(i)
+				col = el.Index(i).Interface()
 			}
 		}
 	}
