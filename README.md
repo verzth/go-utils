@@ -2,7 +2,7 @@
 
 #### Installation
 ```shell script
-go get git.teknoku.digital/teknoku/go-utils
+go get git.verzth.work/go/utils
 ```
 
 #### Available Utils
@@ -13,7 +13,7 @@ package mypackage
 
 import (
 	"fmt"
-	"git.teknoku.digital/teknoku/go-utils/utils"
+	"git.verzth.work/go/utils"
 )
 
 func main() {

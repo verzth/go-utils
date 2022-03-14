@@ -1,3 +1,3 @@
-module git.teknoku.digital/teknoku/go-utils
+module git.verzth.work/go/utils
 
 go 1.13
