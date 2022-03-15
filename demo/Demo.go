@@ -51,9 +51,10 @@ func main() {
 	objArr := []map[string]int{
 		{"id": 4, "num": 2}, {"id": 3, "num": 9}, {"id": 0, "num": 1}, {"id": 8, "num": 2},
 	}
-	fmt.Printf("Where: %v\n", utils.Slice.Where(objArr, func(i int) bool {
+	utils.Slice.Where(&objArr, func(i int) bool {
 		return objArr[i]["num"] == 2
-	})) // Get all value in slice with condition
+	})
+	fmt.Printf("Where: %v\n", objArr) // Get all value in slice with condition
 
 	fmt.Printf("First: %v\n", utils.Slice.First(objArr))               // Get first value in slice
 	fmt.Printf("IndexOf: %v\n", utils.Slice.IndexOf(arrDuplicate, 15)) // Find first index of value in slice

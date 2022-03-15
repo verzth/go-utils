@@ -54,7 +54,7 @@ func (s slice) IndexOf(collections interface{}, val interface{}) (index int) {
 	return
 }
 
-func (s slice) Where(collections interface{}, fn func(int) bool) (cols interface{}) {
+func (s slice) Where(collections interface{}, fn func(int) bool) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
 		var el reflect.Value
@@ -70,15 +70,15 @@ func (s slice) Where(collections interface{}, fn func(int) bool) (cols interface
 			return
 		}
 
-		newCols := reflect.MakeSlice(indirect.Type(), 0, 0)
+		cols := reflect.MakeSlice(el.Type(), 0, 0)
 		for i := 0; i < el.Len(); i++ {
 			if fn(i) {
-				newCols = reflect.Append(newCols, reflect.ValueOf(el.Index(i).Interface()))
+				cols = reflect.Append(cols, reflect.ValueOf(el.Index(i).Interface()))
 			}
 		}
-		cols = newCols
+
+		indirect.Elem().Set(cols)
 	}
-	return
 }
 
 func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int) {
