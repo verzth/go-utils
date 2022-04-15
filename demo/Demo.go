@@ -65,6 +65,10 @@ func main() {
 		return objArr[i]["id"] == 0
 	})) // Get first index in slice with given condition
 
+	fmt.Printf("IndexesWhere: %v\n", utils.Slice.IndexesWhere(objArr, func(i int) bool {
+		return objArr[i]["id"]%2 == 0
+	})) // Get indexes in slice with given condition
+
 	fmt.Printf("Last: %v\n", utils.Slice.Last(objArr))                        // Get first value in slice
 	fmt.Printf("LastIndexOf: %v\n", utils.Slice.LastIndexOf(arrDuplicate, 0)) // Find last index of value in slice
 	fmt.Printf("LastWhere: %v\n", utils.Slice.LastWhere(objArr, func(i int) bool {
@@ -73,4 +77,9 @@ func main() {
 	fmt.Printf("LastIndexWhere: %v\n", utils.Slice.LastIndexWhere(objArr, func(i int) bool {
 		return objArr[i]["num"] == 2
 	})) // Get last index in slice with given condition
+
+	utils.Slice.RemoveWhere(&objArr, func(i int) bool {
+		return objArr[i]["id"]%2 == 0
+	})
+	fmt.Printf("RemoveWhere: %v\n", objArr) // Remove in slice with given condition
 }

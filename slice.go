@@ -108,6 +108,32 @@ func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int
 	return
 }
 
+func (s slice) IndexesWhere(collections interface{}, fn func(int) bool) (indexes []int) {
+	indirect := reflect.ValueOf(collections)
+	if indirect.IsValid() {
+		var el reflect.Value
+		if indirect.Kind() == reflect.Ptr {
+			if indirect.Elem().Kind() == reflect.Slice {
+				el = indirect.Elem()
+			} else {
+				return
+			}
+		} else if indirect.Kind() == reflect.Slice {
+			el = indirect
+		} else {
+			return
+		}
+
+		for i := 0; i < el.Len(); i++ {
+			if fn(i) {
+				indexes = append(indexes, i)
+				return
+			}
+		}
+	}
+	return
+}
+
 func (s slice) LastIndexOf(collections interface{}, val interface{}) (index int) {
 	index = -1
 	indirect := reflect.ValueOf(collections)
@@ -177,7 +203,12 @@ func (s slice) RemoveIn(collections interface{}, indexes []int) {
 	}
 }
 
-// Uniquify(collections): Uniquify slices value
+func (s slice) RemoveWhere(collections interface{}, fn func(int) bool) {
+	ixs := s.IndexesWhere(collections, fn)
+	s.RemoveIn(collections, ixs)
+}
+
+// Uniquify (collections): Uniquify slices value
 func (s slice) Uniquify(collections interface{}) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
