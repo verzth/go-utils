@@ -4,57 +4,27 @@ import (
 	"reflect"
 )
 
-var Slice slice
-
-type slice struct{}
-
-func (s slice) AddTo(collections interface{}, collection interface{}, indexs ...int) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
-		if len(indexs) == 0 {
-			temp := reflect.Append(indirect.Elem().Slice(0, indirect.Elem().Len()), reflect.ValueOf(collection))
-			indirect.Elem().Set(temp)
-		} else {
-			if indexs[0] < indirect.Elem().Len() && indexs[0] >= 0 {
-				tail := reflect.MakeSlice(indirect.Elem().Type(), indirect.Elem().Slice(indexs[0], indirect.Elem().Len()).Len(), indirect.Elem().Cap())
-				reflect.Copy(tail, indirect.Elem().Slice(indexs[0], indirect.Elem().Len()))
-				temp := reflect.Append(indirect.Elem().Slice(0, indexs[0]), reflect.ValueOf(collection))
-				temp = reflect.AppendSlice(temp, tail)
-				indirect.Elem().Set(temp)
-			}
-		}
-	}
-}
-
-func (s slice) IndexOf(collections interface{}, val interface{}) (index int) {
-	index = -1
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		v := reflect.ValueOf(val)
-		for i := 0; i < el.Len(); i++ {
-			if el.Index(i).Interface() == v.Interface() {
-				index = i
-				return
-			}
-		}
-	}
+func Prepend[T any](collections []T, cols ...T) (res []T) {
+	res = append(cols, collections...)
 	return
 }
 
-func (s slice) Where(collections interface{}, fn func(int) bool) {
+func AddTo[T any](collections *[]T, collection T, index int) {
+	temp := make([]T, 0)
+	if index < len(*collections) && index >= 0 {
+		tail := (*collections)[index:]
+		temp = (*collections)[:index]
+		temp = append(temp, collection)
+		temp = append(temp, tail...)
+	} else if index < 0 {
+		temp = Prepend(*collections, collection)
+	} else {
+		temp = append(*collections, collection)
+	}
+	collections = &temp
+}
+
+func Where[T any](collections *[]T, fn func(T) bool) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
 		var el reflect.Value
@@ -72,7 +42,7 @@ func (s slice) Where(collections interface{}, fn func(int) bool) {
 
 		cols := reflect.MakeSlice(el.Type(), 0, 0)
 		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
+			if fn((*collections)[i]) {
 				cols = reflect.Append(cols, reflect.ValueOf(el.Index(i).Interface()))
 			}
 		}
@@ -81,7 +51,7 @@ func (s slice) Where(collections interface{}, fn func(int) bool) {
 	}
 }
 
-func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int) {
+func IndexWhere[T any](collections []T, fn func(T) bool) (index int) {
 	index = -1
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
@@ -99,7 +69,7 @@ func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int
 		}
 
 		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
+			if fn(collections[i]) {
 				index = i
 				return
 			}
@@ -108,108 +78,43 @@ func (s slice) IndexWhere(collections interface{}, fn func(int) bool) (index int
 	return
 }
 
-func (s slice) IndexesWhere(collections interface{}, fn func(int) bool) (indexes []int) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
+func IndexesWhere[T any](collections []T, fn func(T) bool) (indexes []int) {
+	for i := range collections {
+		if fn(collections[i]) {
+			indexes = append(indexes, i)
 			return
-		}
-
-		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
-				indexes = append(indexes, i)
-				return
-			}
 		}
 	}
 	return
 }
 
-func (s slice) LastIndexOf(collections interface{}, val interface{}) (index int) {
+func LastIndexWhere[T any](collections []T, fn func(T) bool) (index int) {
 	index = -1
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		v := reflect.ValueOf(val)
-		for i := 0; i < el.Len(); i++ {
-			if el.Index(i).Interface() == v.Interface() {
-				index = i
-			}
+	for i := range collections {
+		if fn(collections[i]) {
+			index = i
 		}
 	}
 	return
 }
 
-func (s slice) LastIndexWhere(collections interface{}, fn func(int) bool) (index int) {
-	index = -1
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
-				index = i
-			}
-		}
-	}
-	return
+func RemoveAt[T any](collections *[]T, index int) {
+	*collections = append((*collections)[:index], (*collections)[index+1:]...)
 }
 
-func (s slice) RemoveAt(collections interface{}, index int) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
-		if index < indirect.Elem().Len() && index >= 0 {
-			temp := reflect.AppendSlice(indirect.Elem().Slice(0, index), indirect.Elem().Slice(index+1, indirect.Elem().Len()))
-			indirect.Elem().Set(temp)
-		}
-	}
-}
-
-func (s slice) RemoveIn(collections interface{}, indexes []int) {
+func RemoveIn[T any](collections *[]T, indexes []int) {
 	for _, index := range indexes {
-		s.RemoveAt(collections, index)
+		RemoveAt[T](collections, index)
 	}
 }
 
-func (s slice) RemoveWhere(collections interface{}, fn func(int) bool) {
-	ixs := s.IndexesWhere(collections, fn)
-	s.RemoveIn(collections, ixs)
+func RemoveWhere[T any](collections *[]T, fn func(T) bool) {
+	ixs := IndexesWhere[T](*collections, fn)
+	RemoveIn[T](collections, ixs)
 }
 
-// Uniquify (collections): Uniquify slices value
-func (s slice) Uniquify(collections interface{}) {
+// Distinct (collections): Distinct slices value
+func Distinct[T any](collections *[]T) {
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() && indirect.Elem().Kind() == reflect.Slice {
 		for i := 0; i < indirect.Elem().Len(); i++ {
@@ -217,7 +122,7 @@ func (s slice) Uniquify(collections interface{}) {
 			for j := i + 1; j < indirect.Elem().Len(); j++ {
 				v2 := indirect.Elem().Index(j)
 				if v1.Interface() == v2.Interface() {
-					s.RemoveAt(collections, j)
+					RemoveAt[T](collections, j)
 					j--
 				}
 			}
@@ -225,7 +130,7 @@ func (s slice) Uniquify(collections interface{}) {
 	}
 }
 
-func (s slice) IndexesOf(collections interface{}, val interface{}) (indexes []int) {
+func IndexesOf[T any](collections []T, val T) (indexes []int) {
 	indexes = []int{}
 	indirect := reflect.ValueOf(collections)
 	if indirect.IsValid() {
@@ -252,104 +157,40 @@ func (s slice) IndexesOf(collections interface{}, val interface{}) (indexes []in
 	return
 }
 
-func (s slice) First(collections interface{}) (col interface{}) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
+func First[T any](collections []T) (col T) {
+	if len(collections) > 0 {
+		col = collections[0]
+	}
+	return
+}
 
-		if el.Len() > 0 {
-			return el.Index(0).Interface()
+func Last[T any](collections []T) (col T) {
+	if len(collections) > 0 {
+		col = collections[len(collections)-1]
+	}
+	return
+}
+
+func FirstWhere[T any](collections []T, fn func(T) bool) (col T) {
+	for _, c := range collections {
+		if fn(c) {
+			return c
 		}
 	}
 	return
 }
 
-func (s slice) Last(collections interface{}) (col interface{}) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		if el.Len() > 0 {
-			return el.Index(el.Len() - 1).Interface()
+func LastWhere[T any](collections []T, fn func(T) bool) (col T) {
+	for _, c := range collections {
+		if fn(c) {
+			col = c
 		}
 	}
 	return
 }
 
-func (s slice) FirstWhere(collections interface{}, fn func(int) bool) (col interface{}) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
-				return el.Index(i).Interface()
-			}
-		}
-	}
-	return
-}
-
-func (s slice) LastWhere(collections interface{}, fn func(int) bool) (col interface{}) {
-	indirect := reflect.ValueOf(collections)
-	if indirect.IsValid() {
-		var el reflect.Value
-		if indirect.Kind() == reflect.Ptr {
-			if indirect.Elem().Kind() == reflect.Slice {
-				el = indirect.Elem()
-			} else {
-				return
-			}
-		} else if indirect.Kind() == reflect.Slice {
-			el = indirect
-		} else {
-			return
-		}
-
-		for i := 0; i < el.Len(); i++ {
-			if fn(i) {
-				col = el.Index(i).Interface()
-			}
-		}
-	}
-	return
-}
-
-func (s slice) Exist(collections interface{}, val interface{}) (state bool) {
-	i := s.IndexOf(collections, val)
-	state = i != -1
+func Exist[T any](collections []T, fn func(T) bool) (state bool) {
+	i := FirstWhere[T](collections, fn)
+	state = i != nil
 	return
 }

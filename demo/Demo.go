@@ -24,19 +24,23 @@ func main() {
 
 	arr := []int{1, 2, 3, 4, 5}
 	fmt.Printf("Array Before: %v\n", arr)
-	utils.Slice.RemoveAt(&arr, 3) // Remove slice at index
+	utils.RemoveAt[int](&arr, 3) // Remove slice at index
 	fmt.Printf("Array After 1: %v\n", arr)
-	utils.Slice.AddTo(&arr, 4, 3) // Add data to index 3
+	utils.AddTo[int](&arr, 4, 3) // Add data to index 3
 	fmt.Printf("Array After 2: %v\n", arr)
-	utils.Slice.AddTo(&arr, 25, 1) // Add data to index 1
+	utils.AddTo[int](&arr, 25, 1) // Add data to index 1
 	fmt.Printf("Array After 3: %v\n", arr)
-	utils.Slice.AddTo(&arr, 100) // Add data without specify index, will be added to last index
+	arr = utils.Prepend[int](arr, 100) // Prepend data to first index
 	fmt.Printf("Array After 4: %v\n", arr)
-	utils.Slice.AddTo(&arr, -5) // Add data with minus index, will be added to first index which is treated as 0
+	arr = append(arr, -5) // Append data to last index available in golang native function
 	fmt.Printf("Array After 5: %v\n", arr)
-	i := utils.Slice.Exist(&arr, 9)
+	i := utils.Exist[int](arr, func(v int) bool {
+		return v == 9
+	})
 	fmt.Println("Exist", i)
-	j := utils.Slice.Exist(&arr, 100)
+	j := utils.Exist[int](arr, func(v int) bool {
+		return v == 100
+	})
 	fmt.Println("Exist", j)
 
 	utils.FileMove("/root/project/filename", "/root/project/newname", os.ModePerm)                             // Move file from path to path
@@ -45,41 +49,39 @@ func main() {
 
 	arrDuplicate := []int{1, 0, 0, 2, 3, 2, 4, 5, 6, 7, 4, 4, 7, 4, 7, 7, 7, 15}
 	fmt.Println(arrDuplicate)
-	utils.Slice.Uniquify(&arrDuplicate)
+	utils.Distinct[int](&arrDuplicate)
 	fmt.Println(arrDuplicate)
 
 	objArr := []map[string]int{
 		{"id": 4, "num": 2}, {"id": 3, "num": 9}, {"id": 0, "num": 1}, {"id": 8, "num": 2},
 	}
-	utils.Slice.Where(&objArr, func(i int) bool {
-		return objArr[i]["num"] == 2
+	utils.Where[map[string]int](&objArr, func(obj map[string]int) bool {
+		return obj["num"] == 2
 	})
 	fmt.Printf("Where: %v\n", objArr) // Get all value in slice with condition
 
-	fmt.Printf("First: %v\n", utils.Slice.First(objArr))               // Get first value in slice
-	fmt.Printf("IndexOf: %v\n", utils.Slice.IndexOf(arrDuplicate, 15)) // Find first index of value in slice
-	fmt.Printf("FirstWhere: %v\n", utils.Slice.FirstWhere(objArr, func(i int) bool {
-		return objArr[i]["num"] == 9
+	fmt.Printf("First: %v\n", utils.First[map[string]int](objArr)) // Get first value in slice
+	fmt.Printf("FirstWhere: %v\n", utils.FirstWhere[map[string]int](objArr, func(obj map[string]int) bool {
+		return obj["num"] == 9
 	})) // Get first value in slice with given condition
-	fmt.Printf("IndexWhere: %v\n", utils.Slice.IndexWhere(objArr, func(i int) bool {
-		return objArr[i]["id"] == 0
+	fmt.Printf("IndexWhere: %v\n", utils.IndexWhere[map[string]int](objArr, func(obj map[string]int) bool {
+		return obj["id"] == 0
 	})) // Get first index in slice with given condition
 
-	fmt.Printf("IndexesWhere: %v\n", utils.Slice.IndexesWhere(objArr, func(i int) bool {
-		return objArr[i]["id"]%2 == 0
+	fmt.Printf("IndexesWhere: %v\n", utils.IndexesWhere[map[string]int](objArr, func(obj map[string]int) bool {
+		return obj["id"]%2 == 0
 	})) // Get indexes in slice with given condition
 
-	fmt.Printf("Last: %v\n", utils.Slice.Last(objArr))                        // Get first value in slice
-	fmt.Printf("LastIndexOf: %v\n", utils.Slice.LastIndexOf(arrDuplicate, 0)) // Find last index of value in slice
-	fmt.Printf("LastWhere: %v\n", utils.Slice.LastWhere(objArr, func(i int) bool {
-		return objArr[i]["id"] == 4
+	fmt.Printf("Last: %v\n", utils.Last(objArr)) // Get first value in slice
+	fmt.Printf("LastWhere: %v\n", utils.LastWhere[map[string]int](objArr, func(obj map[string]int) bool {
+		return obj["id"] == 4
 	})) // Get last value in slice with given condition
-	fmt.Printf("LastIndexWhere: %v\n", utils.Slice.LastIndexWhere(objArr, func(i int) bool {
-		return objArr[i]["num"] == 2
+	fmt.Printf("LastIndexWhere: %v\n", utils.LastIndexWhere[map[string]int](objArr, func(obj map[string]int) bool {
+		return obj["num"] == 2
 	})) // Get last index in slice with given condition
 
-	utils.Slice.RemoveWhere(&objArr, func(i int) bool {
-		return objArr[i]["id"]%2 == 0
+	utils.RemoveWhere[map[string]int](&objArr, func(obj map[string]int) bool {
+		return obj["id"]%2 == 0
 	})
 	fmt.Printf("RemoveWhere: %v\n", objArr) // Remove in slice with given condition
 }
