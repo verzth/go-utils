@@ -32,3 +32,7 @@ func FileMove(src string, dst string, perm os.FileMode, file ...string) {
 		moveFileRename(src, dst, file[0], file[1], perm)
 	}
 }
+
+func VarToPointer[T any](v T) *T {
+	return &v
+}
